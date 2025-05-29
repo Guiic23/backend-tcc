@@ -1,0 +1,16 @@
+Table users {
+    id integer [primary key, increment]
+    username text [not null]
+    email text [not null, unique]
+    password text [default: "123456"]
+    role varchar [default: 'user', note: 'admin/parcial/user']
+    photo text [note: 'link to photo']
+    created_at timestamp [default: `CURRENT_TIMESTAMP`]
+    updated_at timestamp
+
+    Indexes {
+        (email, password) [name: 'login']
+        (username) [name: 'name']
+        (email) [unique, name: 'unique_email']
+    }
+}
