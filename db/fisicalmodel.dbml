@@ -5,7 +5,6 @@ Table users {
     password text [default: "123456"]
     role varchar [default: 'user', note: 'admin/parcial/user']
     photo text [note: 'link to photo']
-    photo text [note: 'link to photo']
     created_at timestamp [default: `CURRENT_TIMESTAMP`]
     updated_at timestamp
 
@@ -26,8 +25,8 @@ Table payments {
   receipt text [not null]
   obs text
   paymentdate timestamp [not null]
-  verified boolean [default: false, note: 'se o pagamento foi verificado']
-  photo text [note: 'link to photo']
+  verified boolean [default: false, note: 'verificado']
+  photo text [note: 'link para foto comprovante']
   created_at timestamp [default: CURRENT_TIMESTAMP]
   updated_at timestamp
 
