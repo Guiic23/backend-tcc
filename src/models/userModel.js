@@ -20,3 +20,22 @@ export async function findAll() {
 
     
 }
+
+export async function create(userData){
+
+
+    try {
+        const query = "INSERT INTO users (username, email) VALUES (?, ?);";
+        const statement = database.prepare(query);
+        const result = statement.run(userData.username, userData.email);
+        
+        return result;
+    } catch (error) {
+        console.error(error);
+        throw new Error("Error creating user: " + error.message);
+    } finally {
+        
+        database.close();
+       
+    }
+}
