@@ -1,42 +1,111 @@
+// Use DBML to define your database structure
+// Docs: https://dbml.dbdiagram.io/docs
+
+// ok
 Table users {
-    id integer [primary key, increment]
-    username text [not null]
-    email text [not null, unique]
-    password text [default: "123456"]
-    role varchar [default: 'user', note: 'admin/parcial/user']
-    photo text [note: 'link to photo']
-    created_at timestamp [default: `CURRENT_TIMESTAMP`]
-    updated_at timestamp
-
-    Indexes {
-        (email, password) [name: 'login']
-        (username) [name: 'name']
-        (email) [unique, name: 'unique_email']
-    }
-}
-
-
-
-Table payments {
   id integer [primary key, increment]
-  user_id integer [not null, note: 'quem realizou o pagamento']
-  user_control integer [note: 'usuário que criou o registro']
-  value real [not null]
-  receipt text [not null]
-  obs text
-  paymentdate timestamp [not null]
-  verified boolean [default: false, note: 'verificado']
-  photo text [note: 'link para foto comprovante']
-  created_at timestamp [default: CURRENT_TIMESTAMP]
-  updated_at timestamp
-
-  indexes {
-    (paymentdate) [name: 'all_payment_of_date']
-    (value) [name: 'range_of_value']
-    (paymentdate, value) [name: 'all_payment_between_date_and_value']
-  }
+  nome varchar
+  sobrenome varchar
+  email varchar [unique]
+  senha varchar
+  data_criacao timestamp
+  data_ultima_atualizacao timestamp
+  estado boolean
+  papel varchar
+  data_nascimento date
+  genero varchar
+  telefone varchar
+  endereco varchar
+  avatar varchar
+  ultima_ip_login varchar
+  tentativas_falhas_login integer
 }
 
-Ref user_payment:payments.user_id > users.id
+
+//ok
+Table myprogression {
+  id integer [primary key]
+  data_progression date
+  peso decimal(5,2)
+  percentual_gordura decimal(5,2)
+  observacoes text
+  metas_alcancadas text
+  foto_body varchar
+  imc_recente decimal(5,2)
+
+  
+}
+//ok
+Table treinos {
+  id integer [primary key, increment]  // ID único para cada treino
+  user_id integer [not null, ref: > users.id]  // Refere-se ao usuário que fez o treino
+  data timestamp [not null]  // Data e hora do treino
+  exercicio varchar [not null]  // Nome do exercício (ex: 'Supino', 'Agachamento')
+  carga decimal(5,2) [not null]  // Peso utilizado (em kg) no exercício
+  repeticiones integer [not null]  // Número de repetições feitas
+  series integer [not null]  // Número de séries realizadas
+  observacoes text  // Observações sobre o treino (opcional)
+}
+//ok
+Table progressao_carga {
+  id integer [primary key, increment]  // ID único para cada entrada de progressão
+  user_id integer [not null, ref: > users.id]  // Refere-se ao usuário
+  treino_id integer [not null, ref: > treinos.id]  // Relaciona o treino específico
+  carga decimal(5,2) [not null]  // Carga utilizada no treino
+  data timestamp [not null]  // Data do treino
+}
+Table avaliacoes {
+  id integer [primary key, increment]  // ID único da avaliação
+  user_id integer [not null, ref: > users.id]  // Relaciona a avaliação ao usuário (aluno)
+  trainer_id integer [not null, ref: > users.id]  // Relaciona a avaliação ao personal trainer (que é um usuário também)
+  data timestamp [not null]  // Data da avaliação
+  tipo varchar [not null]  // Tipo de avaliação: "Desempenho", "Progresso Físico", etc.
+  nota integer  // Nota de 1 a 5 dada pelo personal trainer
+  comentarios text  // Comentários gerais do personal trainer sobre o treino e o desempenho do aluno
+  peso decimal(5,2)  // Peso do usuário no momento da avaliação (opcional)
+  percentual_gordura decimal(5,2)  // Percentual de gordura do usuário (opcional)
+  imc decimal(5,2)  // IMC do usuário (opcional)
+  treino_id integer [ref: > treinos.id]  // Relaciona a avaliação a um treino específico (se aplicável)
+  observacoes_trainer text  // Observações do personal trainer sobre o desempenho do aluno
+}
+
+Table personal_trainers {
+  id integer [primary key, increment]  // ID único para cada personal trainer
+  user_id integer [not null, unique, ref: > users.id]  // Relaciona o personal trainer ao usuário (com base na tabela 'users')
+  especialidade varchar  // Especialidade do personal trainer (ex: musculação, pilates, yoga, etc.)
+  anos_experiencia integer  // Quantos anos de experiência o personal trainer tem
+  certificacao varchar  // Certificação do personal trainer (ex: "Certificado ABC de Treinamento Físico")
+  disponibilidade varchar  // Disponibilidade de horário do personal (ex: "Segunda a Sexta, das 8h às 17h")
+  bio text  // Descrição sobre o personal trainer (experiência, abordagem de treino, filosofia)
+  foto_avatar varchar  // Foto do personal trainer (link para a imagem do avatar)
+  rating decimal(3,2)  // Avaliação média do personal trainer
+}
+Table alimentos {
+  id integer [primary key, increment]  // ID único do alimento
+  nome varchar [not null, unique]  // Nome do alimento (ex: "Arroz", "Frango", "Banana")
+  categoria varchar  // Categoria (ex: "Carboidrato", "Proteína", "Fruta")
+  calorias decimal(6,2)  // Calorias por 100g
+  proteinas decimal(5,2)  // Proteínas por 100g
+  carboidratos decimal(5,2)  // Carboidratos por 100g
+  gorduras decimal(5,2)  // Gorduras por 100g
+  fibra decimal(5,2)  // Fibras por 100g (opcional)
+  imagem varchar  // Link para imagem do alimento (opcional)
+}
+Table alimentos_consumidos {
+  id integer [primary key, increment]
+  user_id integer [not null, ref: > users.id]  // Referência ao usuário
+  alimento_id integer [not null, ref: > alimentos.id]  // Referência ao alimento
+  data_consumo date [not null]  // Data em que foi consumido
+  quantidade_gramas decimal(6,2) [not null]  // Quantidade consumida em gramas
+  refeicao varchar  // Qual refeição? ("Café da manhã", "Almoço", "Jantar", etc.)
+  observacoes text  // Observações (opcional)
+}
 
 
+
+
+
+
+
+
+Ref: "myprogression"."peso" < "myprogression"."percentual_gordura"

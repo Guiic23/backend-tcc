@@ -7,6 +7,8 @@ import alimentosRoutes from './alimentosRoutes.js'
 import avaliacoesRoutes from './avaliacoesRoutes.js'
 import treinosRoutes from './treinosRoutes.js'
 import progressionRoutes from './progressionRoutes.js'
+import progressaoCargaRoutes from './progressaoCargaRoutes.js'
+import personalTrainerRoutes from './personalTrainerRoutes.js'
 
 router.use('/', userRoutes);
 router.use('/', paymentRoutes);
@@ -14,5 +16,8 @@ router.use('/', alimentosRoutes);
 router.use('/', avaliacoesRoutes);
 router.use('/', treinosRoutes);
 router.use('/', progressionRoutes);
+router.use('/', progressaoCargaRoutes);
+router.use('/', personalTrainerRoutes);
+
 
 export default router;
