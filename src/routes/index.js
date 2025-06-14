@@ -9,6 +9,7 @@ import treinosRoutes from './treinosRoutes.js'
 import progressionRoutes from './progressionRoutes.js'
 import progressaoCargaRoutes from './progressaoCargaRoutes.js'
 import personalTrainerRoutes from './personalTrainerRoutes.js'
+import alimentosConsumidosRoutes from './alimentosConsumidosRoutes.js'
 
 router.use('/', userRoutes);
 router.use('/', paymentRoutes);
@@ -18,6 +19,7 @@ router.use('/', treinosRoutes);
 router.use('/', progressionRoutes);
 router.use('/', progressaoCargaRoutes);
 router.use('/', personalTrainerRoutes);
+router.use('/', alimentosConsumidosRoutes);
 
 
 export default router;
